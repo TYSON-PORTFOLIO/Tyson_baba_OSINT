@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYSON OSINT LOOKUP TOOL | SECURE ACCESS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+        }
+        
+        .app-container {
+            display: none;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        header h1 {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .features-card {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .features-card h2 {
+            color: #1a2a6c;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #b21f1f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .features-card h2 i {
+            color: #b21f1f;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f5f7ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #1a2a6c;
+        }
+        
+        .feature-list li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #b21f1f;
+        }
+        
+        .feature-list li i {
+            font-size: 1.5rem;
+            color: #b21f1f;
+            min-width: 30px;
+        }
+        
+        .feature-text h3 {
+            font-size: 1.2rem;
+            color: #1a2a6c;
+            margin-bottom: 5px;
+        }
+        
+        .feature-text p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        .lookup-card {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .lookup-card h2 {
+            color: #1a2a6c;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #b21f1f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .lookup-card h2 i {
+            color: #b21f1f;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #1a2a6c;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn i {
+            font-size: 1.4rem;
+        }
+        
+        .results {
+            margin-top: 30px;
+            background: #f5f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            flex: 1;
+            display: none;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .results.visible {
+            display: block;
+        }
+        
+        .results h3 {
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .result-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-item h4 {
+            color: #b21f1f;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .result-item p {
+            padding-left: 28px;
+            color: #444;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .disclaimer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+        
+        .telegram-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #229ED9;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .telegram-contact i {
+            font-size: 1.2rem;
+        }
+        
+        .login-logo {
+            font-size: 4rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+        }
+        
+        .login-title {
+            color: #1a2a6c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-subtitle {
+            color: #555;
+            margin-bottom: 30px;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #1a2a6c;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+        }
+        
+        .login-footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .user-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .user-bar i {
+            font-size: 1.2rem;
+        }
+        
+        .logout-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .login-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div class="login-container" id="login-container">
+            <div class="login-logo">
+                <i class="fas fa-user-secret"></i>
+            </div>
+            <h2 class="login-title">TYSON OSINT LOOKUP TOOL</h2>
+            <p class="login-subtitle">Secure access to advanced OSINT capabilities</p>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                
+                <button class="btn" id="login-btn">
+                    <i class="fas fa-lock"></i> Login to Dashboard
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>For support, contact via Telegram:</p>
+                <div class="telegram-contact">
+                    <i class="fab fa-telegram"></i>
+                    <span>@tyson_owner</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Application -->
+        <div class="app-container" id="app-container">
+            <div class="user-bar">
+                <i class="fas fa-user-circle"></i>
+                <span>Welcome, Tyson</span>
+                <button class="logout-btn" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <header>
+                <h1>TYSON OSINT DATA LOOKUP TOOL</h1>
+                <p>Retrieve comprehensive information based on phone number input with our advanced OSINT solution</p>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="features-card">
+                    <h2><i class="fas fa-gift"></i> What You'll Get</h2>
+                    <ul class="feature-list">
+                        <li>
+                            <i class="fas fa-id-card"></i>
+                            <div class="feature-text">
+                                <h3>Number To Aadhaar Card</h3>
+                                <p>Link phone numbers to Aadhaar card details with verified connections</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-user"></i>
+                            <div class="feature-text">
+                                <h3>Full Name & Father's Name</h3>
+                                <p>Retrieve complete personal identification information</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-home"></i>
+                            <div class="feature-text">
+                                <h3>Complete Address Details</h3>
+                                <p>Access full residential address including PIN code and landmarks</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-mobile-alt"></i>
+                            <div class="feature-text">
+                                <h3>Alternate Phone Numbers</h3>
+                                <p>Discover associated and alternate contact numbers</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-tower-cell"></i>
+                            <div class="feature-text">
+                                <h3>Operator & Circle Information</h3>
+                                <p>Get telecom operator details and geographical circle information</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <div class="feature-text">
+                                <h3>Reference ID & Email (if available)</h3>
+                                <p>Access reference IDs and associated email addresses</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="lookup-card">
+                    <h2><i class="fas fa-search"></i> Lookup Information</h2>
+                    
+                    <div class="input-group">
+                        <label for="phone">Enter Phone Number</label>
+                        <input type="tel" id="phone" placeholder="Enter 10-digit phone number" maxlength="10">
+                    </div>
+                    
+                    <button class="btn" id="lookup-btn">
+                        <i class="fas fa-search"></i> Lookup Information
+                    </button>
+                    
+                    <div class="results" id="results">
+                        <h3>Retrieved Information</h3>
+                        <div class="result-item">
+                            <h4><i class="fas fa-id-card"></i> Aadhaar Information</h4>
+                            <p>Aadhaar Card: XXXXXX1234 (Linked)</p>
+                        </div>
+                        <div class="result-item">
+                            <h4><i class="fas fa-user"></i> Personal Details</h4>
+                            <p>Name: Rajesh Kumar Sharma</p>
+                            <p>Father's Name: Vijay Sharma</p>
+                        </div>
+                        <div class="result-item">
+                            <h4><i class="fas fa-home"></i> Address Details</h4>
+                            <p>Address: 24, Green Park Apartments, Sector 15</p>
+                            <p>City: Noida, Uttar Pradesh</p>
+                            <p>PIN: 201301</p>
+                        </div>
+                        <div class="result-item">
+                            <h4><i class="fas fa-mobile-alt"></i> Phone Numbers</h4>
+                            <p>Primary: 98XXXXX123</p>
+                            <p>Alternate: 87XXXXX456, 70XXXXX789</p>
+                        </div>
+                        <div class="result-item">
+                            <h4><i class="fas fa-tower-cell"></i> Operator Details</h4>
+                            <p>Operator: Jio</p>
+                            <p>Circle: Uttar Pradesh (West)</p>
+                        </div>
+                        <div class="result-item">
+                            <h4><i class="fas fa-envelope"></i> Reference & Email</h4>
+                            <p>Reference ID: REF2023JIO4567</p>
+                            <p>Email: rajesh.sharma@example.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>This is a demonstration interface for educational purposes only.</p>
+                <div class="disclaimer">
+                    <p><strong>Disclaimer:</strong> This tool is for demonstration purposes only. Actual OSINT operations must comply with all applicable privacy laws and regulations. Never use personal data without proper authorization.</p>
+                </div>
+                <div class="telegram-contact">
+                    <i class="fab fa-telegram"></i>
+                    <span>Contact support: @tyson_owner</span>
+                </div>
+                <p>&copy; 2023 TYSON OSINT Data Solutions. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginContainer = document.getElementById('login-container');
+            const appContainer = document.getElementById('app-container');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const lookupBtn = document.getElementById('lookup-btn');
+            const resultsDiv = document.getElementById('results');
+            const phoneInput = document.getElementById('phone');
+            const usernameInput = document.getElementById('username');
+            
+            // Focus on username field on load
+            usernameInput.focus();
+            
+            // Login functionality
+            loginBtn.addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username === 'tyson' && password === 'tyson') {
+                    // Success - show app
+                    loginContainer.style.display = 'none';
+                    appContainer.style.display = 'block';
+                } else {
+                    alert('Invalid credentials. Please use username: tyson, password: tyson');
+                }
+            });
+            
+            // Logout functionality
+            logoutBtn.addEventListener('click', function() {
+                loginContainer.style.display = 'block';
+                appContainer.style.display = 'none';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                resultsDiv.classList.remove('visible');
+            });
+            
+            // Lookup functionality
+            lookupBtn.addEventListener('click', function() {
+                if (phoneInput.value.length !== 10 || isNaN(phoneInput.value)) {
+                    alert('Please enter a valid 10-digit phone number');
+                    return;
+                }
+                
+                // Simulate loading
+                lookupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+                lookupBtn.disabled = true;
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    resultsDiv.classList.add('visible');
+                    lookupBtn.innerHTML = '<i class="fas fa-search"></i> Lookup Information';
+                    lookupBtn.disabled = false;
+                    
+                    // Scroll to results
+                    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 1500);
+            });
+            
+            // Format phone number input
+            phoneInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').substring(0, 10);
+            });
+            
+            // Allow login with Enter key
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
